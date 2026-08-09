@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<link rel="manifest" href="manifest.json">
+<title>TikBatch Mobile</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#0b1020;color:#f8fafc}
+.app{max-width:720px;margin:auto;padding:18px 14px 36px}
+h1{margin:0;font-size:27px}.sub{color:#94a3b8;margin:5px 0 18px}
+.card{background:#121a2d;border:1px solid #24304a;border-radius:18px;padding:14px;margin:12px 0}
+textarea{width:100%;min-height:180px;background:#0a1020;color:#fff;border:1px solid #334155;border-radius:14px;padding:13px;font-size:15px;resize:vertical}
+button{border:0;border-radius:12px;padding:12px 15px;font-weight:700;font-size:14px;cursor:pointer}
+.primary{background:#7c3aed;color:#fff}.secondary{background:#26324b;color:#fff}.danger{background:#7f1d1d;color:#fff}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.item{display:flex;align-items:center;gap:8px;padding:11px;border-radius:12px;background:#0d1527;margin:7px 0;word-break:break-all}
+.num{min-width:28px;height:28px;border-radius:50%;background:#27324a;display:grid;place-items:center}
+.status{margin-left:auto;color:#94a3b8;font-size:12px}.ok{color:#4ade80}.wait{color:#fbbf24}
+.note{font-size:13px;color:#cbd5e1;line-height:1.5}.small{font-size:12px;color:#94a3b8}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>📱 TikBatch Mobile</h1>
+  <div class="sub">Quản lý nhiều link và tải qua SnapTik trên điện thoại</div>
+
+  <div class="card">
+    <b>Dán nhiều link TikTok</b>
+    <textarea id="links" placeholder="Mỗi link một dòng&#10;https://vt.tiktok.com/...&#10;https://www.tiktok.com/@.../video/..."></textarea>
+    <div class="row">
+      <button class="primary" onclick="prepare()">THÊM VÀO HÀNG ĐỢI</button>
+      <button class="secondary" onclick="paste()">DÁN TỪ CLIPBOARD</button>
+      <button class="danger" onclick="clearAll()">XÓA HẾT</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <b>Hàng đợi</b>
+    <div id="list" class="small" style="margin-top:8px">Chưa có link.</div>
+    <div class="row">
+      <button class="primary" onclick="start()">BẮT ĐẦU</button>
+      <button class="secondary" onclick="copyAll()">SAO CHÉP TẤT CẢ LINK</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <b>Cách hoạt động</b>
+    <p class="note">
+      Trình duyệt điện thoại không cho một website tự điều khiển ô nhập liệu của
+      một website khác như SnapTik. Vì vậy bản mobile này dùng cách an toàn:
+      mỗi lần bạn bấm <b>MỞ SNAPTIK</b>, link được tự sao chép vào clipboard,
+      SnapTik mở ngay, và bạn chỉ cần dán link rồi tải.
+    </p>
+    <p class="small">Không cần cài Python hay chạy máy tính.</p>
+  </div>
+</div>
+
+<script>
+const KEY="tikbatch-links";
+let queue=JSON.parse(localStorage.getItem(KEY)||"[]");
+function save(){localStorage.setItem(KEY,JSON.stringify(queue));render()}
+function valid(s){return /^https?:\\/\\//i.test(s)&&(s.includes("tiktok.com")||s.includes("douyin.com"))}
+function prepare(){
+ const raw=document.getElementById("links").value.split(/\n/).map(x=>x.trim()).filter(valid);
+ const seen=new Set(queue.map(x=>x.url));
+ for(const url of raw) if(!seen.has(url)){queue.push({url,status:"Chờ"});seen.add(url)}
+ document.getElementById("links").value="";
+ save()
+}
+async function paste(){
+ try{document.getElementById("links").value=await navigator.clipboard.readText()}
+ catch(e){alert("Trình duyệt không cho đọc clipboard. Hãy dán bằng thao tác giữ vào ô nhập.")}
+}
+async function openSnap(i){
+ const item=queue[i];
+ try{
+   await navigator.clipboard.writeText(item.url);
+   item.status="Đã sao chép";
+   save();
+ }catch(e){
+   alert("Hãy cho phép quyền Clipboard rồi thử lại.");
+   return;
+ }
+ window.open("https://snaptik.vn/","_blank");
+ item.status="Đã mở SnapTik";
+ save();
+}
+function start(){
+ const i=queue.findIndex(x=>x.status==="Chờ");
+ if(i<0){alert("Hàng đợi đã hết.");return}
+ openSnap(i);
+}
+function copyAll(){
+ navigator.clipboard.writeText(queue.map(x=>x.url).join("\n"))
+   .then(()=>alert("Đã sao chép toàn bộ link."))
+   .catch(()=>alert("Clipboard bị chặn bởi trình duyệt."));
+}
+function remove(i){queue.splice(i,1);save()}
+function clearAll(){if(confirm("Xóa toàn bộ hàng đợi?")){queue=[];save()}}
+function render(){
+ const el=document.getElementById("list");
+ if(!queue.length){el.textContent="Chưa có link.";return}
+ el.innerHTML=queue.map((x,i)=>`
+ <div class="item">
+   <div class="num">${i+1}</div>
+   <div style="flex:1">${esc(x.url)}</div>
+   <div class="status ${x.status==="Đã mở SnapTik"?"ok":"wait"}">${x.status}</div>
+   <button class="secondary" onclick="openSnap(${i})">MỞ</button>
+   <button class="danger" onclick="remove(${i})">×</button>
+ </div>`).join("")
+}
+function esc(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+render();
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
