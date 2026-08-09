@@ -1,204 +1,173 @@
-<!DOCTYPE html>
+html = r'''<!doctype html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b1020">
+<meta name="theme-color" content="#080d1b">
 <title>TikBatch Mobile</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#080d1b;color:#eef2ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-.wrap{max-width:760px;margin:auto;padding:20px 14px 50px}
-h1{font-size:28px;margin:5px 0 4px}
-.sub{color:#9eabd0;margin-bottom:18px}
-.card{background:#111a2e;border:1px solid #263452;border-radius:18px;padding:16px;margin:14px 0;box-shadow:0 8px 30px #0003}
-label{font-weight:800;display:block;margin-bottom:9px}
-textarea{width:100%;min-height:180px;resize:vertical;background:#080e1d;color:#eef2ff;border:1px solid #34425f;border-radius:13px;padding:14px;font-size:15px;outline:none}
-textarea:focus{border-color:#8b5cf6}
-.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:11px}
-button{border:0;border-radius:11px;padding:12px 15px;font-weight:800;color:white;background:#263654;cursor:pointer}
-button.primary{background:linear-gradient(135deg,#7c3aed,#a855f7)}
-button.danger{background:#9f2424}
-button.green{background:#166534}
-button:disabled{opacity:.5;cursor:not-allowed}
-.note{color:#9eabd0;font-size:13px;line-height:1.5}
-.queue{display:grid;gap:9px}
-.item{background:#0b1222;border:1px solid #263452;border-radius:12px;padding:12px}
-.item .url{font-size:13px;word-break:break-all;color:#c8d2ee;margin-bottom:9px}
-.status{font-size:12px;color:#aeb9d8}
-.actions{display:flex;gap:7px;flex-wrap:wrap}
-.actions button{padding:9px 11px;font-size:12px}
-.progress{height:9px;background:#202b43;border-radius:20px;overflow:hidden;margin-top:12px}
-.bar{height:100%;width:0;background:#8b5cf6;transition:.2s}
-.log{white-space:pre-wrap;background:#070b15;border-radius:12px;padding:12px;min-height:100px;font:12px Consolas,monospace;color:#b9c6e6;overflow:auto}
-.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#1d2943;color:#b9c6e6;font-size:11px;margin-left:5px}
-.small{font-size:12px}
+*{box-sizing:border-box}body{margin:0;background:#070b16;color:#f4f7ff;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif}.wrap{max-width:760px;margin:auto;padding:18px 14px 50px}h1{font-size:30px;margin:4px 0}.sub{color:#aeb9d8;margin-bottom:16px}.card{background:#111a2e;border:1px solid #293653;border-radius:18px;padding:16px;margin:13px 0}label{display:block;font-weight:850;margin-bottom:9px}textarea{width:100%;min-height:180px;background:#080e1d;color:#fff;border:1px solid #34425f;border-radius:13px;padding:14px;font-size:15px;outline:0}textarea:focus{border-color:#a855f7}.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}button{border:0;border-radius:11px;padding:12px 14px;font-weight:850;color:#fff;background:#293957;cursor:pointer}button.primary{background:linear-gradient(135deg,#7c3aed,#a855f7)}button.green{background:#166534}button.danger{background:#991b1b}button:disabled{opacity:.45}.queue{display:grid;gap:9px}.item{background:#0a1120;border:1px solid #293653;border-radius:13px;padding:12px}.url{font-size:13px;word-break:break-all;color:#d6def2}.status{font-size:12px;color:#aeb9d8;margin-top:7px}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.actions button{font-size:12px;padding:9px 11px}.badge{display:inline-block;background:#202d48;color:#c9d3e9;padding:4px 8px;border-radius:99px;font-size:11px;margin-left:5px}.progress{height:9px;background:#202b43;border-radius:20px;overflow:hidden;margin-top:12px}.bar{height:100%;width:0;background:#a855f7;transition:.2s}.note{font-size:13px;color:#aeb9d8;line-height:1.55}.log{white-space:pre-wrap;background:#070b15;border-radius:12px;padding:12px;min-height:90px;max-height:230px;overflow:auto;font:12px Consolas,monospace;color:#c4cfea}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>📱 TikBatch Mobile</h1>
-  <div class="sub">Quản lý nhiều link TikTok và hỗ trợ tải qua SnapTik</div>
+<h1>📱 TikBatch Mobile</h1>
+<div class="sub">Quản lý nhiều link TikTok và mở SnapTik theo hàng đợi</div>
 
-  <div class="card">
-    <label>Dán nhiều link TikTok</label>
-    <textarea id="input" placeholder="Mỗi link một dòng&#10;https://www.tiktok.com/@.../video/...&#10;https://vt.tiktok.com/..."></textarea>
-    <div class="row">
-      <button class="primary" id="add">THÊM VÀO HÀNG ĐỢI</button>
-      <button id="paste">DÁN TỪ CLIPBOARD</button>
-      <button class="danger" id="clear">XÓA HẾT</button>
-    </div>
-    <p class="note">
-      Mẹo: trên điện thoại, nút “MỞ SNAP TIK” sẽ mở SnapTik và chép link vào clipboard để bạn dán vào ô tải.
-      Trình duyệt không cho một website tự điều khiển ô nhập và nút tải của website khác vì lý do bảo mật.
-    </p>
-  </div>
+<div class="card">
+<label for="input">Dán nhiều link TikTok</label>
+<textarea id="input" placeholder="Mỗi link một dòng&#10;https://www.tiktok.com/@.../video/...&#10;https://vt.tiktok.com/..."></textarea>
+<div class="row">
+<button type="button" class="primary" id="addBtn">THÊM VÀO HÀNG ĐỢI</button>
+<button type="button" id="pasteBtn">DÁN CLIPBOARD</button>
+<button type="button" class="danger" id="clearBtn">XÓA HẾT</button>
+</div>
+<div class="note" style="margin-top:10px">Chỉ cần mỗi dòng có link TikTok. Có thể dán nhiều link cùng lúc.</div>
+</div>
 
-  <div class="card">
-    <label>Hàng đợi <span class="badge" id="count">0</span></label>
-    <div id="queue" class="queue"></div>
-    <div class="row">
-      <button class="primary" id="start" disabled>BẮT ĐẦU TỪNG LINK</button>
-      <button class="green" id="copyAll" disabled>SAO CHÉP TẤT CẢ LINK</button>
-    </div>
-    <div class="progress"><div id="bar" class="bar"></div></div>
-    <p id="summary" class="note">Chưa có link.</p>
-  </div>
+<div class="card">
+<label>Hàng đợi <span class="badge" id="count">0</span></label>
+<div id="queue"></div>
+<div class="row">
+<button type="button" class="primary" id="startBtn" disabled>BẮT ĐẦU</button>
+<button type="button" class="green" id="copyBtn" disabled>SAO CHÉP TẤT CẢ</button>
+</div>
+<div class="progress"><div id="bar" class="bar"></div></div>
+<div id="summary" class="note" style="margin-top:8px">Chưa có link.</div>
+</div>
 
-  <div class="card">
-    <label>Nhật ký</label>
-    <div id="log" class="log">Sẵn sàng.</div>
-  </div>
+<div class="card">
+<label>Nhật ký</label>
+<div id="log" class="log">Sẵn sàng. Hãy dán link rồi bấm THÊM VÀO HÀNG ĐỢI.</div>
+</div>
 
-  <div class="card">
-    <label>Lưu ý</label>
-    <div class="note">
-      Ứng dụng này không thể tự tải file từ SnapTik bằng JavaScript thuần nếu SnapTik không cung cấp API công khai,
-      vì trình duyệt chặn truy cập chéo miền. Vì vậy bản web này dùng cách an toàn: tự sao chép từng link và mở SnapTik.
-      Bạn chỉ cần dán link rồi bấm tải trên SnapTik. Chỉ tải nội dung bạn có quyền sử dụng.
-    </div>
-  </div>
+<div class="card">
+<div class="note"><b>Lưu ý:</b> trình duyệt không cho website tự bấm nút tải trên một website khác như SnapTik. TikBatch có thể xếp hàng, sao chép link và mở SnapTik; bước tải cuối cùng cần thao tác trên SnapTik.</div>
+</div>
 </div>
 
 <script>
-const SNAP="https://snaptik.vn/";
-const input=document.getElementById("input");
-const queueEl=document.getElementById("queue");
-const countEl=document.getElementById("count");
-const startBtn=document.getElementById("start");
-const copyAllBtn=document.getElementById("copyAll");
-const clearBtn=document.getElementById("clear");
-const addBtn=document.getElementById("add");
-const pasteBtn=document.getElementById("paste");
-const logEl=document.getElementById("log");
-const bar=document.getElementById("bar");
-const summary=document.getElementById("summary");
-let queue=[];
+(function(){
+'use strict';
+var input=document.getElementById('input');
+var addBtn=document.getElementById('addBtn');
+var pasteBtn=document.getElementById('pasteBtn');
+var clearBtn=document.getElementById('clearBtn');
+var startBtn=document.getElementById('startBtn');
+var copyBtn=document.getElementById('copyBtn');
+var queueBox=document.getElementById('queue');
+var count=document.getElementById('count');
+var bar=document.getElementById('bar');
+var summary=document.getElementById('summary');
+var logBox=document.getElementById('log');
+var queue=[];
 
-function log(s){
-  logEl.textContent += "\\n"+s;
-  logEl.scrollTop=logEl.scrollHeight;
-}
-function isTikTok(s){
-  try{
-    const u=new URL(s);
-    return /(^|\\.)tiktok\\.com$/i.test(u.hostname) || /(^|\\.)vt\\.tiktok\\.com$/i.test(u.hostname);
-  }catch{return false}
-}
+function log(s){logBox.textContent+='\n'+s;logBox.scrollTop=logBox.scrollHeight}
+function safe(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function looksLikeTikTok(s){return /tiktok\.com/i.test(s)}
+function save(){try{localStorage.setItem('tikbatch_queue',JSON.stringify(queue))}catch(e){}}
 function render(){
-  countEl.textContent=queue.length;
-  startBtn.disabled=!queue.length;
-  copyAllBtn.disabled=!queue.length;
-  queueEl.innerHTML="";
-  queue.forEach((x,i)=>{
-    const d=document.createElement("div");
-    d.className="item";
-    d.innerHTML=`
-      <div class="url">${i+1}. ${escapeHtml(x.url)}</div>
-      <div class="status">${escapeHtml(x.status)}</div>
-      <div class="actions" style="margin-top:8px">
-        <button class="primary" data-open="${i}">MỞ SNAP TIK</button>
-        <button data-copy="${i}">SAO CHÉP LINK</button>
-        <button class="danger" data-del="${i}">XÓA</button>
-      </div>`;
-    queueEl.appendChild(d);
-  });
+ count.textContent=queue.length;
+ startBtn.disabled=queue.length===0;
+ copyBtn.disabled=queue.length===0;
+ queueBox.innerHTML='';
+ queue.forEach(function(x,i){
+  var d=document.createElement('div');
+  d.className='item';
+  d.innerHTML='<div class="url">'+(i+1)+'. '+safe(x.url)+'</div>'+
+  '<div class="status">'+safe(x.status||'Chờ xử lý')+'</div>'+
+  '<div class="actions">'+
+  '<button type="button" class="primary" data-open="'+i+'">MỞ SNAP TIK</button>'+
+  '<button type="button" data-copy="'+i+'">SAO CHÉP</button>'+
+  '<button type="button" class="danger" data-delete="'+i+'">XÓA</button>'+
+  '</div>';
+  queueBox.appendChild(d);
+ });
+ save();
 }
-function escapeHtml(s){
-  return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-}
-async function copy(text){
-  try{await navigator.clipboard.writeText(text);return true}
-  catch{
-    const t=document.createElement("textarea");t.value=text;document.body.appendChild(t);
-    t.select();document.execCommand("copy");t.remove();return true;
-  }
+async function copyText(text){
+ try{await navigator.clipboard.writeText(text);return true}
+ catch(e){
+  var t=document.createElement('textarea');
+  t.value=text;t.style.position='fixed';t.style.left='-9999px';
+  document.body.appendChild(t);t.focus();t.select();
+  try{document.execCommand('copy')}catch(_){}
+  t.remove();return true;
+ }
 }
 function addLinks(){
-  const lines=input.value.split(/\\r?\\n/).map(x=>x.trim()).filter(Boolean);
-  let added=0;
-  for(const url of lines){
-    if(!isTikTok(url)){log("Bỏ qua link không hợp lệ: "+url);continue}
-    if(queue.some(x=>x.url===url))continue;
-    queue.push({url,status:"Chờ xử lý"});
-    added++;
-  }
-  input.value="";
-  render();
-  log("Đã thêm "+added+" link.");
+ var lines=(input.value||'').split(/[\r\n]+/);
+ var added=0,skipped=0;
+ lines.forEach(function(line){
+  var url=line.trim();
+  if(!url)return;
+  var m=url.match(/https?:\/\/[^\s]+/i);
+  if(m)url=m[0].replace(/[),.;]+$/,'');
+  if(!looksLikeTikTok(url)){skipped++;return}
+  if(queue.some(function(q){return q.url===url}))return;
+  queue.push({url:url,status:'Chờ xử lý'});added++;
+ });
+ input.value='';
+ render();
+ log('Đã thêm '+added+' link vào hàng đợi.'+(skipped?' Bỏ qua '+skipped+' dòng không phải TikTok.':''));
+ summary.textContent=queue.length?'Có '+queue.length+' link trong hàng đợi.':'Chưa có link.';
 }
-addBtn.onclick=addLinks;
-pasteBtn.onclick=async()=>{
-  try{input.value=await navigator.clipboard.readText();log("Đã dán nội dung clipboard.");}
-  catch{alert("Trình duyệt không cho đọc clipboard. Hãy nhấn giữ và Dán thủ công.");}
-};
-clearBtn.onclick=()=>{queue=[];bar.style.width="0%";summary.textContent="Đã xóa hàng đợi.";render();};
-copyAllBtn.onclick=async()=>{
-  await copy(queue.map(x=>x.url).join("\\n"));
-  log("Đã sao chép "+queue.length+" link.");
-};
-queueEl.onclick=async(e)=>{
-  const open=e.target.dataset.open;
-  const cp=e.target.dataset.copy;
-  const del=e.target.dataset.del;
-  if(open!==undefined){
-    const x=queue[open];
-    await copy(x.url);
-    x.status="Đã chép link — SnapTik đang mở";
-    render();
-    window.open(SNAP,"_blank");
-    log("Mở SnapTik cho link "+(Number(open)+1)+". Link đã được chép.");
-  }
-  if(cp!==undefined){
-    await copy(queue[cp].url);
-    queue[cp].status="Đã sao chép";
-    render();
-    log("Đã sao chép link "+(Number(cp)+1)+".");
-  }
-  if(del!==undefined){queue.splice(del,1);render();}
-};
-startBtn.onclick=async()=>{
-  if(!queue.length)return;
-  for(let i=0;i<queue.length;i++){
-    const x=queue[i];
-    x.status="Đang xử lý — đã chép link";
-    render();
-    await copy(x.url);
-    window.open(SNAP,"_blank");
-    log("["+ (i+1)+"/"+queue.length +"] Đã mở SnapTik. Link nằm trong clipboard.");
-    summary.textContent="Đang xử lý "+(i+1)+"/"+queue.length+". Sau khi tải xong, quay lại đây để mở link tiếp theo.";
-    bar.style.width=((i)/queue.length*100)+"%";
-    if(i<queue.length-1){
-      await new Promise(r=>setTimeout(r,1200));
-    }
-    x.status="Đã mở SnapTik — hãy dán và tải video";
-    render();
-  }
-  bar.style.width="100%";
-  summary.textContent="Đã mở hết "+queue.length+" link. Kiểm tra thư mục Tải xuống của điện thoại.";
-  log("Hoàn tất hàng đợi.");
-};
+addBtn.addEventListener('click',function(e){e.preventDefault();addLinks()});
+input.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='Enter')addLinks()});
+pasteBtn.addEventListener('click',async function(){
+ try{input.value=await navigator.clipboard.readText();log('Đã lấy clipboard. Bấm THÊM VÀO HÀNG ĐỢI.')}
+ catch(e){alert('Không đọc được clipboard tự động. Hãy nhấn giữ ô nhập và chọn Dán.')}
+});
+clearBtn.addEventListener('click',function(){
+ queue=[];save();bar.style.width='0%';summary.textContent='Đã xóa hàng đợi.';render();log('Đã xóa toàn bộ hàng đợi.')
+});
+copyBtn.addEventListener('click',async function(){
+ await copyText(queue.map(function(x){return x.url}).join('\n'));
+ log('Đã sao chép '+queue.length+' link.')
+});
+queueBox.addEventListener('click',async function(e){
+ var b=e.target.closest('button');if(!b)return;
+ var oi=b.getAttribute('data-open'),ci=b.getAttribute('data-copy'),di=b.getAttribute('data-delete');
+ if(oi!==null){
+  var x=queue[Number(oi)];
+  await copyText(x.url);
+  x.status='Đã chép link — mở SnapTik';
+  render();
+  window.open('https://snaptik.vn/','_blank');
+  log('Đã chép link '+(Number(oi)+1)+' và mở SnapTik.');
+ }else if(ci!==null){
+  await copyText(queue[Number(ci)].url);
+  queue[Number(ci)].status='Đã sao chép';
+  render();
+  log('Đã sao chép link '+(Number(ci)+1)+'.');
+ }else if(di!==null){
+  queue.splice(Number(di),1);render();log('Đã xóa link '+(Number(di)+1)+'.');
+ }
+});
+startBtn.addEventListener('click',async function(){
+ if(!queue.length)return;
+ startBtn.disabled=true;
+ for(var i=0;i<queue.length;i++){
+  var x=queue[i];
+  await copyText(x.url);
+  x.status='Đã chép — đang mở SnapTik';
+  render();
+  window.open('https://snaptik.vn/','_blank');
+  bar.style.width=((i+1)/queue.length*100)+'%';
+  summary.textContent='Đã mở '+(i+1)+'/'+queue.length+' link.';
+  log('['+(i+1)+'/'+queue.length+'] Đã mở SnapTik.');
+  if(i<queue.length-1)await new Promise(function(r){setTimeout(r,1500)});
+ }
+ summary.textContent='Đã xử lý hết '+queue.length+' link.';
+ startBtn.disabled=false;
+ render();
+});
 render();
+})();
 </script>
 </body>
-</html>
+</html>'''
+path="/mnt/data/index.html"
+with open(path,"w",encoding="utf-8") as f:
+    f.write(html)
+print("Đã tạo file index.html phiên bản sửa lỗi.")
